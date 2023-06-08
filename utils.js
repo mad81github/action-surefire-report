@@ -121,12 +121,15 @@ async function parseFile(file, isFilenameInStackTrace) {
                         message,
                         raw_details: stackTrace
                     });
-                } else {
+                } else {                         
+                    const title = `${filename}.${testcase._attributes.name}`;
+                    core.info(`${title}:`);               
+
                     const message = (
                         ""
                     ).trim();
                     const path = await resolvePath(filenameWithPackage);
-                    const title = `${filename}.${testcase._attributes.name}`;
+                    
                      annotations.push({
                         path,
                         start_line: null,
