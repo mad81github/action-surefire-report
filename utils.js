@@ -65,12 +65,14 @@ async function parseFile(file, isFilenameInStackTrace) {
             : [report.testsuites.testsuite];
 
     for (const testsuite of testsuites) {
+        core.debug(`testsuites file ${testsuites}`);
         const testcases = Array.isArray(testsuite.testcase)
             ? testsuite.testcase
             : testsuite.testcase
                 ? [testsuite.testcase]
                 : [];
         for (const testcase of testcases) {
+            core.debug(`testcases file ${testcase}`);
             count++;
             if (testcase.skipped) { skipped++ } 
             else {
@@ -122,6 +124,7 @@ async function parseFile(file, isFilenameInStackTrace) {
                         raw_details: stackTrace
                     });
                 } else {                         
+                    core.debug(`else file`);
                     const title = `${filename}.${testcase._attributes.name}`;
                     core.info(`${title}:`);               
 
