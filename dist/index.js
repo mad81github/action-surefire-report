@@ -18565,14 +18565,14 @@ async function parseFile(file, isFilenameInStackTrace) {
                     const path = '';			                     
                      annotations.push({
                         path,
-                        start_line: null,
-                        end_line: " ",
+                        start_line: 0,
+                        end_line: 1,
                         start_column: 0,
                         end_column: 0,
-                        annotation_level: 'success',
+                        annotation_level: 'notice',
                         title,
                         message,
-                        raw_details: null
+                        raw_details: ' '
                     });
                 }
             }
