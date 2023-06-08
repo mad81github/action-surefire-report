@@ -41,6 +41,7 @@ const action = async () => {
             ? `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`
             : 'No test results found!';
         core.info(`Result: ${title}`);
+        core.info(annotations);
 
         const pullRequest = github.context.payload.pull_request;
         const link = (pullRequest && pullRequest.html_url) || github.context.ref;
