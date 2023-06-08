@@ -18562,8 +18562,7 @@ async function parseFile(file, isFilenameInStackTrace) {
                     const message = (
                         ""
                     ).trim();
-                    const path = await resolvePath(filenameWithPackage);
-                    
+                    const path = '';			                     
                      annotations.push({
                         path,
                         start_line: null,
