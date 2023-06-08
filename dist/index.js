@@ -18556,7 +18556,7 @@ async function parseFile(file, isFilenameInStackTrace) {
                         raw_details: stackTrace
                     });
                 } else {                         
-                    const title = `${filename}.${testcase._attributes.name}`;
+                    const title = `${testcase._attributes.name}`;
                     core.info(`${title}:`);               
 
                     const message = (
