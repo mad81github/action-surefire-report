@@ -18506,54 +18506,76 @@ async function parseFile(file, isFilenameInStackTrace) {
                 : [];
         for (const testcase of testcases) {
             count++;
-            if (testcase.skipped) skipped++;
-            if (testcase.failure || testcase.flakyFailure || testcase.error) {
-                let testcaseData =
-                    (testcase.failure && testcase.failure._cdata) ||
-                    (testcase.failure && testcase.failure._text) ||
-                    (testcase.flakyFailure && testcase.flakyFailure._cdata) ||
-                    (testcase.flakyFailure && testcase.flakyFailure._text) ||
-                    (testcase.error && testcase.error._cdata) ||
-                    (testcase.error && testcase.error._text) ||
-                    '';
-                testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
-                const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
+            if (testcase.skipped) { skipped++ } 
+            else {
+                if (testcase.failure || testcase.flakyFailure || testcase.error) {
+                    let testcaseData =
+                        (testcase.failure && testcase.failure._cdata) ||
+                        (testcase.failure && testcase.failure._text) ||
+                        (testcase.flakyFailure && testcase.flakyFailure._cdata) ||
+                        (testcase.flakyFailure && testcase.flakyFailure._text) ||
+                        (testcase.error && testcase.error._cdata) ||
+                        (testcase.error && testcase.error._text) ||
+                        '';
+                    testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
+                    const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
 
-                const message = (
-                    (testcase.failure &&
-                        testcase.failure._attributes &&
-                        testcase.failure._attributes.message) ||
-                    (testcase.flakyFailure &&
-                        testcase.flakyFailure._attributes &&
-                        testcase.flakyFailure._attributes.message) ||
-                    (testcase.error &&
-                        testcase.error._attributes &&
-                        testcase.error._attributes.message) ||
-                    stackTrace.split('\n').slice(0, 2).join('\n')
-                ).trim();
+                    const message = (
+                        (testcase.failure &&
+                            testcase.failure._attributes &&
+                            testcase.failure._attributes.message) ||
+                        (testcase.flakyFailure &&
+                            testcase.flakyFailure._attributes &&
+                            testcase.flakyFailure._attributes.message) ||
+                        (testcase.error &&
+                            testcase.error._attributes &&
+                            testcase.error._attributes.message) ||
+                        stackTrace.split('\n').slice(0, 2).join('\n')
+                    ).trim();
 
-                const { filename, filenameWithPackage, line } = resolveFileAndLine(
-                    testcase._attributes.file,
-                    testcase._attributes.classname,
-                    stackTrace,
-                    isFilenameInStackTrace
-                );
+                    const { filename, filenameWithPackage, line } = resolveFileAndLine(
+                        testcase._attributes.file,
+                        testcase._attributes.classname,
+                        stackTrace,
+                        isFilenameInStackTrace
+                    );
 
-                const path = await resolvePath(filenameWithPackage);
-                const title = `${filename}.${testcase._attributes.name}`;
-                core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
+                    const path = await resolvePath(filenameWithPackage);
+                    const title = `${filename}.${testcase._attributes.name}`;
+                    core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
 
-                annotations.push({
-                    path,
-                    start_line: line,
-                    end_line: line,
-                    start_column: 0,
-                    end_column: 0,
-                    annotation_level: 'failure',
-                    title,
-                    message,
-                    raw_details: stackTrace
-                });
+                    annotations.push({
+                        path,
+                        start_line: line,
+                        end_line: line,
+                        start_column: 0,
+                        end_column: 0,
+                        annotation_level: 'failure',
+                        title,
+                        message,
+                        raw_details: stackTrace
+                    });
+                } else {                         
+                    const title = `${filename}.${testcase._attributes.name}`;
+                    core.info(`${title}:`);               
+
+                    const message = (
+                        ""
+                    ).trim();
+                    const path = await resolvePath(filenameWithPackage);
+                    
+                     annotations.push({
+                        path,
+                        start_line: null,
+                        end_line: " ",
+                        start_column: 0,
+                        end_column: 0,
+                        annotation_level: 'success',
+                        title,
+                        message,
+                        raw_details: null
+                    });
+                }
             }
         }
     }
