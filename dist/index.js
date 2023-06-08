@@ -18556,24 +18556,18 @@ async function parseFile(file, isFilenameInStackTrace) {
                         raw_details: stackTrace
                     });
                 } else {                         
-                    const title = `${testcase._attributes.name}`;
-                    core.info(`${title}:`);               
-
-                    const message = (
-                        ""
-                    ).trim();
-                    const path = '';			                     
-                     annotations.push({
-                        path,
-                        start_line: 0,
+                    const title = `${testcase._attributes.name}`;                          
+                    annotations.push({
+                        '${testcase._attributes.file}',
+                        start_line: 1,
                         end_line: 1,
                         start_column: 0,
                         end_column: 0,
                         annotation_level: 'notice',
                         title,
-                        message,
+                        'OK Test',
                         raw_details: ' '
-                    });
+                    });			
                 }
             }
         }
