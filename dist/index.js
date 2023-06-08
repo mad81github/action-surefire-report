@@ -18556,18 +18556,34 @@ async function parseFile(file, isFilenameInStackTrace) {
                         raw_details: stackTrace
                     });
                 } else {                         
-                    const title = `${testcase._attributes.name}`;                          
+                   let testcaseData = '';
+                    testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
+                    const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
+
+                    const message = 'OK Test';
+
+                    const { filename, filenameWithPackage, line } = resolveFileAndLine(
+                        testcase._attributes.file,
+                        testcase._attributes.classname,
+                        stackTrace,
+                        isFilenameInStackTrace
+                    );
+
+                    const path = await resolvePath(filenameWithPackage);
+                    const title = `${filename}.${testcase._attributes.name}`;
+                    core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
+
                     annotations.push({
-                        '${testcase._attributes.file}',
-                        start_line: 1,
-                        end_line: 1,
+                        path,
+                        start_line: line,
+                        end_line: line,
                         start_column: 0,
                         end_column: 0,
                         annotation_level: 'notice',
                         title,
-                        'OK Test',
-                        raw_details: ' '
-                    });			
+                        message,
+                        raw_details: stackTrace
+                    });
                 }
             }
         }
